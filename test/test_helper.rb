@@ -9,13 +9,19 @@ require 'tilt/erb'
 Capybara.app = TaskManagerApp
 
 module TestHelpers
+
   def teardown
     task_manager.delete_all
     super
   end
 
+  def setup
+    task_manager.delete_all
+    super
+  end
+
   def task_manager
-    database = YAML::Store.new('db/task_manager_test')
+    database = Sequel.sqlite('db/task_manager_test.sqlite')
     @task_manager ||= TaskManager.new(database)
   end
 
